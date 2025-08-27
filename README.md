@@ -1,0 +1,2 @@
+# PristimageVIM
+first private vimrc

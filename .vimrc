@@ -1,7 +1,4 @@
 " English Comments for clarity
-
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
 " - For Vim:    ~/.vim/plugged
 " 中文注释：为插件指定一个目录
 call plug#begin('~/.vim/plugged')
@@ -22,6 +19,12 @@ Plug 'tpope/vim-commentary'
 Plug 'neoclide/coc.nvim', { 'branch': 'release', 'do': 'yarn install'}
 
 Plug 'sheerun/vim-polyglot'
+
+Plug 'ghifarit53/tokyonight-vim'
+
+Plug 'dense-analysis/ale'
+
+Plug 'graywh/vim-colorindent'
 "======================================================================
 "== END OF PLUGINS
 "== 插件列表结束
@@ -49,6 +52,28 @@ set splitright
 " Enable line numbers in NERDTree
 let g:NERDTreeShowLineNumbers = 1
 let g:python_highlight_all = 1
+
+set termguicolors
+colorscheme tokyonight          "主题
+set background=dark         "暗色模式
+let g:tokyonight_style = 'night'
+let g:tokyonight_enable_italic = 1
+let g:tokyonight_transparent_background = 1
+let g:clap_plugin_experimental = v:true
+let g:NERDTreeAutoOpen = 1
+let g:NERDTreeWinPos = "left"
+let NERDTreeShowBookmarks=1
+let g:NERDTreeShowHidden = 1
+let NERDTreeAutoCenter=1
+autocmd VimEnter * NERDTree
+wincmd w
+autocmd VimEnter * wincmd w
+let g:ale_fix_on_save = 1
+let g:ale_python_formatters = ['black']
+let g:ale_linters = {
+\   'python': [],
+\}
+
 "=====================================================================
 "==HOTKEY
 "=====================================================================
@@ -273,3 +298,32 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 nnoremap <C-b> :NERDTreeToggle<CR>
 nnoremap <expr> j (line('.') == line('$')) ? 'gg' : 'j'
 nnoremap <expr> k (line('.') == 1) ? 'G' : 'k'
+
+function! TrimWhitespaceAndSave()
+    " 记录当前光标的位置，防止 %s 命令后光标跳走
+    let l:cursor_pos = getpos('.')
+
+    " 1. 使用 silent! 来静默执行替换，并且在没有匹配时不会报错
+    silent! %s/\s\+$//e
+
+    " 恢复光标位置
+    call setpos('.', l:cursor_pos)
+
+    " 2. 静默保存文件
+    silent! w
+
+    " 3. 使用 echom 来显示消息 (echom 的消息会保存在历史记录中)
+    "    strftime('%H:%M:%S') 用来获取当前的时:分:秒
+    echom "auto saved: " . strftime('%H:%M:%S')
+endfunction
+
+" --- 将快捷键映射到上面定义的函数 ---
+
+" 在普通模式下: 直接调用函数
+nnoremap <C-s> :call TrimWhitespaceAndSave()<CR>
+
+" 在插入模式下: 退出插入模式，调用函数，然后返回插入模式
+inoremap <C-s> <Esc>:call TrimWhitespaceAndSave()<CR>gi
+
+" 在可视模式下: 退出可视模式，调用函数
+vnoremap <C-s> <Esc>:call TrimWhitespaceAndSave()<CR>

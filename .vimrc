@@ -22,9 +22,10 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'ghifarit53/tokyonight-vim'
 
-Plug 'dense-analysis/ale'
-
 Plug 'graywh/vim-colorindent'
+
+Plug 'vim-autoformat/vim-autoformat'
+
 "======================================================================
 "== END OF PLUGINS
 "== 插件列表结束
@@ -48,14 +49,16 @@ set cursorcolumn "高亮所在行"
 set cursorline "高亮所在列"
 highlight CursorLine ctermbg=240 guibg=#555555
 set whichwrap=b,s,<,>,[,],h,l
-set splitright
+set splitbelow
+" set splitright
 " Enable line numbers in NERDTree
 let g:NERDTreeShowLineNumbers = 1
 let g:python_highlight_all = 1
 
 set termguicolors
-colorscheme tokyonight          "主题
+colorscheme tokyonight         "主题
 set background=dark         "暗色模式
+" colorscheme pycat
 let g:tokyonight_style = 'night'
 let g:tokyonight_enable_italic = 1
 let g:tokyonight_transparent_background = 1
@@ -68,12 +71,12 @@ let NERDTreeAutoCenter=1
 autocmd VimEnter * NERDTree
 wincmd w
 autocmd VimEnter * wincmd w
-let g:ale_fix_on_save = 1
-let g:ale_python_formatters = ['black']
-let g:ale_linters = {
-\   'python': [],
-\}
 
+filetype plugin indent on
+set autoindent
+set smartindent
+set ignorecase
+set clipboard=unnamedplus
 "=====================================================================
 "==HOTKEY
 "=====================================================================
